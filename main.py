@@ -5,11 +5,11 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import config
 
-filename = "participants.txt"
+file_name = "participants.txt"
 
 def importFile():
     objs = []
-    with open(filename, 'r') as f:
+    with open(file_name, 'r') as f:
         reader = csv.reader(f, delimiter=',')
         for row in reader:
             objs.append(row)
@@ -18,7 +18,7 @@ def importFile():
     sendEmails(objs)
 
 def sendEmails(objects):
-    server = smtplib.SMTP(SMTP_ADDRESS, SMTP_PORT)
+    server = smtplib.SMTP(config.SMTP_ADDRESS, config.SMTP_PORT)
     server.starttls()
     server.login(config.SECRET_SENDER_EMAIL, config.SECRET_SENDER_PASSWORD)
 
@@ -31,18 +31,18 @@ def sendEmails(objects):
         msg['From'] = config.SECRET_SENDER_EMAIL
         msg['To'] = item[0]
 
-        personAssigned = ""
+        person_assigned = ""
         if((i + 1) > len(objects) - 1):
-            personAssigned = objects[0]
+            person_assigned = objects[0]
         else:
-            personAssigned = objects[i+1]
+            person_assigned = objects[i+1]
 
 
         # Subject of the email, change to your liking
         msg['Subject'] = "Test Message Subject"
 
         # Body of the email, change to your liking
-        body = "Test message\n Assigned Person = " + personAssigned[0]
+        body = "Test message\n Assigned Person = " + person_assigned[0]
 
         msg.attach(MIMEText(body, 'plain'))
         server.sendmail(config.SECRET_SENDER_EMAIL, item[0], msg.as_string())
