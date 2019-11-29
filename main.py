@@ -7,10 +7,6 @@ import config
 
 filename = "participants.txt"
 
-smtpAddress = "smtp.gmail.com"
-smtpPort = 587
-
-
 def importFile():
     objs = []
     with open(filename, 'r') as f:
@@ -22,7 +18,7 @@ def importFile():
     sendEmails(objs)
 
 def sendEmails(objects):
-    server = smtplib.SMTP(smtpAddress, smtpPort)
+    server = smtplib.SMTP(SMTP_ADDRESS, SMTP_PORT)
     server.starttls()
     server.login(config.SECRET_SENDER_EMAIL, config.SECRET_SENDER_PASSWORD)
 
