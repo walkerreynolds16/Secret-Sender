@@ -3,16 +3,13 @@ import csv
 from random import shuffle
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import config
 
 filename = "participants.txt"
 
 smtpAddress = "smtp.gmail.com"
 smtpPort = 587
 
-sendingEmail = "secretpizzasender@gmail.com"
-sendingPassword = "Z95fwTEh1bJ1"
-
-# testing git
 
 def importFile():
     objs = []
@@ -27,7 +24,7 @@ def importFile():
 def sendEmails(objects):
     server = smtplib.SMTP(smtpAddress, smtpPort)
     server.starttls()
-    server.login(sendingEmail, sendingPassword)
+    server.login(config.SECRET_SENDER_EMAIL, config.SECRET_SENDER_PASSWORD)
 
     # item[0] = email address
     # item[1] = name of the person
@@ -35,7 +32,7 @@ def sendEmails(objects):
     for i in range(len(objects)):
         item = objects[i]
         msg = MIMEMultipart()
-        msg['From'] = sendingEmail
+        msg['From'] = config.SECRET_SENDER_EMAIL
         msg['To'] = item[0]
 
         personAssigned = ""
@@ -52,7 +49,7 @@ def sendEmails(objects):
         body = "Test message\n Assigned Person = " + personAssigned[0]
 
         msg.attach(MIMEText(body, 'plain'))
-        server.sendmail(sendingEmail, item[0], msg.as_string())
+        server.sendmail(config.SECRET_SENDER_EMAIL, item[0], msg.as_string())
     
     server.quit()
 
